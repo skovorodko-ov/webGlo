@@ -17,8 +17,6 @@ window.addEventListener('DOMContentLoaded', () => {
         return {timeRemaining, hours, minuts, seconds};
     };
 
-    console.log(getTimeRemaining());
-
     const addZero = (elem) => {
       if (elem < 10) {
         return '0' + elem;
@@ -34,13 +32,80 @@ window.addEventListener('DOMContentLoaded', () => {
       if (timer.timeRemaining <= 0) {
         clearInterval(updateClock);
         timerHours.textContent = '00';
+        timerHours.style.color = 'red';
         timerMinutes.textContent = '00';
+        timerMinutes.style.color = 'red';
         timerSeconds.textContent = '00';
+        timerSeconds.style.color = 'red';
       }
     }, 1000);
 
   };
 
-	countTimer('19 august 2021');
+	countTimer('20 august 2021');
+
+  // Menu
+  const togleMenu = () => {
+    const btnMenu = document.querySelector('.menu'),
+    menu = document.querySelector('menu'),
+    closeBtn = document.querySelector('.close-btn'),
+    menuItems = menu.querySelectorAll('ul>li');
+
+    const handlerMenu = () => {
+      menu.classList.toggle('active-menu');
+    };
+
+    btnMenu.addEventListener('click', handlerMenu);
+
+    closeBtn.addEventListener('click', handlerMenu);
+
+    menuItems.forEach((elem) => {
+      elem.addEventListener('click', handlerMenu);
+    });
+
+  };
+
+  togleMenu();
+
+  //Popup
+
+
+  console.log(innerWidth);
+  const togglePopup = () => {
+    const popup = document.querySelector('.popup'),
+    popupBtn = document.querySelectorAll('.popup-btn'),
+    popupClose = document.querySelector('.popup-close');
+
+    popupBtn.forEach((elem) => {
+      elem.addEventListener('click', () => {
+        popup.style.display = 'block';
+        popup.style.opasiti = '0';
+
+        if (innerWidth > 768) {
+          let count = 0,
+          animateInterval;
+
+          const popupAnimate = () => {
+          animateInterval = requestAnimationFrame(popupAnimate);
+          count += 5;
+          if (count <= 100) {
+            popup.style.opacity = `${count / 100}`;
+          } else {
+            cancelAnimationFrame(animateInterval);
+            count = 0;
+          }
+          };
+
+          animateInterval = requestAnimationFrame(popupAnimate);
+        }
+      });
+    });
+
+    popupClose.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
+  };
+
+  togglePopup();
 
 });
