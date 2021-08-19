@@ -51,7 +51,8 @@ window.addEventListener('DOMContentLoaded', () => {
     closeBtn = document.querySelector('.close-btn'),
     menuItems = menu.querySelectorAll('ul>li');
 
-    const handlerMenu = () => {
+    const handlerMenu = (e) => {
+      e.preventDefault();
       menu.classList.toggle('active-menu');
     };
 
