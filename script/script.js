@@ -49,7 +49,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const btnMenu = document.querySelector('.menu'),
     menu = document.querySelector('menu'),
     closeBtn = document.querySelector('.close-btn'),
-    menuItems = menu.querySelectorAll('ul>li');
+    menuItems = menu.querySelectorAll('a');
 
     const handlerMenu = () => {
       menu.classList.toggle('active-menu');
@@ -108,13 +108,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
   //Low scroll
 
-  const menu = document.querySelector('menu'),
-        main = document.querySelector('main');
 
-  const lowScroll = (e) => {
+  const lowScroll = () => {
+    const menu = document.querySelector('menu'),
+          main = document.querySelector('main');
+    let target;
+
+    const scroll = (e) => {
     e.preventDefault();
 
-    let target;
     if (e.target.hasAttribute('href')) {
       target = e.target.getAttribute('href');
     } else {
@@ -126,18 +128,17 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     const block = document.querySelector(target);
-    let i = 0;
 
-    const interval = setInterval(() => {
-      if (i <= block.offsetTop) {
-        window.scrollTo(0, i);
-        i += 10;
-      } else {
-        clearInterval(interval);
-      }
-    }, 1);
+    window.scrollTo({
+      top: block.offsetTop,
+      behavior: "smooth"
+    });
+    };
+    
+  menu.addEventListener('click', scroll);
+  main.addEventListener('click', scroll);
   };
-  
-  menu.addEventListener('click', lowScroll);
-  main.addEventListener('click', lowScroll);
+
+  lowScroll();
+
 });
