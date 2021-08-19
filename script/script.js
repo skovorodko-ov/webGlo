@@ -109,4 +109,38 @@ window.addEventListener('DOMContentLoaded', () => {
 
   togglePopup();
 
+  //Low scroll
+  const lowScroll = () => {
+    const menu = document.querySelector('menu'),
+          main = document.querySelector('main');
+    let target;
+
+    const scroll = (e) => {
+    e.preventDefault();
+
+    if (e.target.hasAttribute('href')) {
+      target = e.target.getAttribute('href');
+    } else {
+      if (e.target.parentNode.hasAttribute('href')) {
+        target = e.target.parentNode.getAttribute('href');
+      } else {
+        return;
+      }
+    }
+
+    const block = document.querySelector(target);
+
+    window.scrollTo({
+      top: block.offsetTop,
+      behavior: "smooth"
+    });
+    };
+    
+  menu.addEventListener('click', scroll);
+  main.addEventListener('click', scroll);
+  };
+
+  lowScroll();
+
+
 });
