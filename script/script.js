@@ -69,8 +69,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   //Popup
 
-
-  console.log(innerWidth);
   const togglePopup = () => {
     const popup = document.querySelector('.popup'),
     popupBtn = document.querySelectorAll('.popup-btn'),
@@ -108,4 +106,38 @@ window.addEventListener('DOMContentLoaded', () => {
 
   togglePopup();
 
+  //Low scroll
+
+  const menu = document.querySelector('menu'),
+        main = document.querySelector('main');
+
+  const lowScroll = (e) => {
+    e.preventDefault();
+
+    let target;
+    if (e.target.hasAttribute('href')) {
+      target = e.target.getAttribute('href');
+    } else {
+      if (e.target.parentNode.hasAttribute('href')) {
+        target = e.target.parentNode.getAttribute('href');
+      } else {
+        return;
+      }
+    }
+
+    const block = document.querySelector(target);
+    let i = 0;
+
+    const interval = setInterval(() => {
+      if (i <= block.offsetTop) {
+        window.scrollTo(0, i);
+        i += 10;
+      } else {
+        clearInterval(interval);
+      }
+    }, 1);
+  };
+  
+  menu.addEventListener('click', lowScroll);
+  main.addEventListener('click', lowScroll);
 });
