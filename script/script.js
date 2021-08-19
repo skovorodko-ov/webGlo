@@ -49,7 +49,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const btnMenu = document.querySelector('.menu'),
     menu = document.querySelector('menu'),
     closeBtn = document.querySelector('.close-btn'),
-    menuItems = menu.querySelectorAll('ul>li');
+    menuItems = menu.querySelectorAll('a');
 
     const handlerMenu = (e) => {
       e.preventDefault();
