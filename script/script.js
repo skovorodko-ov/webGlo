@@ -70,8 +70,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   //Popup
 
-
-  console.log(innerWidth);
   const togglePopup = () => {
     const popup = document.querySelector('.popup'),
     popupBtn = document.querySelectorAll('.popup-btn'),
@@ -130,10 +128,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const block = document.querySelector(target);
 
-    window.scrollTo({
+    if (block) {
+          window.scrollTo({
       top: block.offsetTop,
       behavior: "smooth"
     });
+    }
     };
     
   menu.addEventListener('click', scroll);
