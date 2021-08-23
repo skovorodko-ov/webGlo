@@ -46,27 +46,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Menu
   const togleMenu = () => {
-    const btnMenu = document.querySelector('.menu'),
-      menu = document.querySelector('menu'),
-      closeBtn = document.querySelector('.close-btn'),
-      menuItems = menu.querySelectorAll('a');
+    const menu = document.querySelector('menu');
 
-    const handlerMenu = (e) => {
-      e.preventDefault();
-      menu.classList.toggle('active-menu');
-    };
-
-    btnMenu.addEventListener('click', handlerMenu);
-
-    menu.addEventListener('click', (event) => {
+    document.addEventListener('click', (event) => {
       let target = event.target;
-      if (target.classList.contains('close-btn')) {
-        handlerMenu(event);
+      if (target.closest('.menu')) {
+        menu.classList.toggle('active-menu');
       } else {
-        if (target.closest('a')) {
-          handlerMenu(event);
+        if (!target.closest('menu') || target.closest('a')) {
+          menu.classList.remove('active-menu');
         }
-        return;
       }
     });
   };
