@@ -287,4 +287,63 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   slider();
+
+  // смена фото "наша команда"
+  const changePhoto = () => {
+  const command = document.querySelector('.command');
+  let src;
+
+  command.addEventListener('mouseover', (e) => {
+    if (e.target.classList.contains('command__photo')) {
+      src = e.target.src;
+      e.target.src = e.target.dataset.img;
+    }
+  });
+  command.addEventListener('mouseout', (e) => {
+    if (e.target.classList.contains('command__photo')) {
+      e.target.src = src;
+    }
+  });
+  };
+
+  changePhoto();
+
+  // валидация калькулятора, имени, сообщения, e-mail, телефона
+  const validation = () => {
+
+    const checkInputValue = (e) => {
+      let inputValue = e.value;
+      if (e.hasAttribute('min')) {
+          inputValue = inputValue.replace(/\D/, '');
+          return inputValue;
+      }
+      if (e.getAttribute('name') === 'user_name' || e.getAttribute('name') === 'user_message') {
+          inputValue = inputValue.replace(/[^А-Яа-яЁё -]/g, '');
+          return inputValue;
+      }
+      if (e.getAttribute('name') === 'user_email') {
+          inputValue = inputValue.replace(/[^(A-Za-z\-_\.!~\*'@)]/g, '');
+          return inputValue;
+      }
+      if (e.getAttribute('name') === 'user_phone') {
+          inputValue = inputValue.replace(/[^(\d\-\(\))]/g, '');
+          return inputValue;
+      }
+    };
+
+    document.addEventListener('focusout', (event) => {
+      let target = event.target;
+      
+      target.value = checkInputValue(target).trim();
+      target.value = target.value.replace(/^(\-+)|(\-+)$/g, '').replace(/ +/g, ' ').replace(/\-+/g, '-').trim();
+
+      if (target.getAttribute('name') === "user_name") {
+        target.value = target.value.toLowerCase().replace(/^.|\s./g, (match) => match.toUpperCase());
+      }
+
+    });
+  };
+
+  validation();
+
 });
