@@ -334,7 +334,7 @@ window.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('focusout', (event) => {
       let target = event.target;
 
-      if (target.value) {
+      if (target.value && !target.matches('select')) {
         target.value = checkInputValue(target);
         target.value = target.value.trim();
         target.value = target.value.replace(/^(\-+)|(\-+)$/g, '').replace(/ +/g, ' ').replace(/\-+/g, '-').trim();
@@ -348,5 +348,53 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   validation();
+
+  // калькулятор
+  const calc = (price = 100) => {
+    const calcBlock = document.querySelector('.calc-block'),
+      calcType = document.querySelector('.calc-type'),
+      calcSquare = document.querySelector('.calc-square'),
+      calcCount = document.querySelector('.calc-count'),
+      calcDay = document.querySelector('.calc-day'),
+      totalValue = document.getElementById('total');
+    
+
+    const countSum = () => {
+      let total = 0,
+        countValue = 1,
+        dayValye =1;
+      const typeValue = calcType.options[calcType.selectedIndex].value,
+        squareValue = +calcSquare.value;
+
+
+      if (calcCount.value > 1) {
+        countValue += (calcCount.value - 1) / 10;
+      }
+
+      if (calcDay.value && calcDay.value < 5) {
+        dayValye *= 2;
+      } else if (calcDay.value && calcDay.value < 10) {
+        dayValye *= 1.5;
+      }
+
+      if (typeValue && squareValue) {
+        total = price * typeValue * squareValue * countValue * dayValye;
+      }
+
+
+      totalValue.textContent = total;
+    };
+
+    calcBlock.addEventListener('change', (event) => {
+      const target = event.target;
+
+      if (target.matches('select') || target.matches('input')) {
+        countSum();
+      }
+    });
+
+  };
+
+  calc(100);
 
 });
