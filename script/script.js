@@ -314,7 +314,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const checkInputValue = (e) => {
       let inputValue = e.value;
       if (e.hasAttribute('min')) {
-          inputValue = inputValue.replace(/\D/, '');
+          inputValue = inputValue.replace(/\D/g, '');
           return inputValue;
       }
       if (e.getAttribute('name') === 'user_name' || e.getAttribute('name') === 'user_message') {
@@ -322,7 +322,7 @@ window.addEventListener('DOMContentLoaded', () => {
           return inputValue;
       }
       if (e.getAttribute('name') === 'user_email') {
-          inputValue = inputValue.replace(/[^(A-Za-z\-_\.!~\*'@)]/g, '');
+          inputValue = inputValue.replace(/[^(A-Za-z0-9\-_\.!~\*'@)]/g, '');
           return inputValue;
       }
       if (e.getAttribute('name') === 'user_phone') {
@@ -333,10 +333,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('focusout', (event) => {
       let target = event.target;
-      
-      target.value = checkInputValue(target).trim();
-      target.value = target.value.replace(/^(\-+)|(\-+)$/g, '').replace(/ +/g, ' ').replace(/\-+/g, '-').trim();
 
+      if (target.value) {
+        target.value = checkInputValue(target);
+        target.value = target.value.trim();
+        target.value = target.value.replace(/^(\-+)|(\-+)$/g, '').replace(/ +/g, ' ').replace(/\-+/g, '-').trim();
+      }
+      
       if (target.getAttribute('name') === "user_name") {
         target.value = target.value.toLowerCase().replace(/^.|\s./g, (match) => match.toUpperCase());
       }
