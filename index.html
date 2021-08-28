@@ -410,5 +410,90 @@
 	</div>
 </div>
 <script src="script\script.js"></script>
+
+<script src="../plugins/phoneMask.js"></script>
+
+<script src="../plugins/validator/validator.js"></script>
+
+<script>
+	const valid1 = new Validator({
+		selector: '#form1',
+		pattern: {
+			phone: /^\+?7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
+			name: /[А-Яа-яЁё -]/g
+		},
+		method: {
+			'form1-phone': [
+				['notEmpty'],
+				['pattern', 'phone']
+			],
+			'form1-email': [
+				['notEmpty'],
+				['pattern', 'email']
+			],
+			'form1-name': [
+				['notEmpty'],
+				['pattern', 'name']
+			]
+		}
+	});
+
+	valid1.init();
+</script>
+<script>
+	const valid3 = new Validator({
+		selector: '#form3',
+		pattern: {
+			phone: /^\+?7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
+			name: /[А-Яа-яЁё -]/g
+		},
+		method: {
+			'form3-phone': [
+				['notEmpty'],
+				['pattern', 'phone']
+			],
+			'form3-email': [
+				['notEmpty'],
+				['pattern', 'email']
+			],
+			'form3-name': [
+				['notEmpty'],
+				['pattern', 'name']
+			]
+		}
+	});
+
+	valid3.init();
+</script>
+<script>
+	const valid2 = new Validator({
+		selector: '#form2',
+		pattern: {
+			phone: /^\+?7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
+			name: /[А-Яа-яЁё -]/g
+		},
+		method: {
+			'form2-phone': [
+				['notEmpty'],
+				['pattern', 'phone']
+			],
+			'form2-email': [
+				['notEmpty'],
+				['pattern', 'email']
+			],
+			'form2-name': [
+				['notEmpty'],
+				['pattern', 'name']
+			],
+			'form2-message': [
+				['notEmpty'],
+				['pattern', 'name']
+			]
+		}
+	});
+
+	valid2.init();
+</script>
+
 </body>
 </html>

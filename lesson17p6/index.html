@@ -6,7 +6,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+<style>
+  input {
+    display: block;
+  }
+</style>
 <body>
-  <script src="../lesson17p6/script.js"></script>
+  <section>
+    <form id="myForm">
+      <label for="phone">Phone</label>
+      <input type="text" id="phone" placeholder="phone">
+      <label for="email">Email</label>
+      <input type="text" id="email" placeholder="email">
+      <br>
+      <button type="sibmit">sibmit</button>
+      <button type="reset">reset</button>
+    </form>
+  </section>
+  
+  <script src="../plugins/validator/validator.js"></script>
+
+  <script>
+    const valid = new Validator({
+      selector: '#myForm',
+      pattern: {},
+      method: {
+        'phone': [
+          ['notEmpty'],
+          ['pattern', 'phone']
+        ],
+        'email': [
+          ['notEmpty'],
+          ['pattern', 'email']
+        ]
+      }
+    });
+
+    valid.init();
+  </script>
+
 </body>
 </html>
