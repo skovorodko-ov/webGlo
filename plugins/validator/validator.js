@@ -20,6 +20,7 @@ class Validator{
       if (this.error.size) {
         e.preventDefault();
       }
+    this.scroll();
     });
   }
 
@@ -51,7 +52,6 @@ class Validator{
 
   checkIt (event) {
     const target = event.target;
-
     if (this.isValid(target)) {
       this.showSuccess(target);
       this.error.delete(target);
@@ -59,17 +59,18 @@ class Validator{
       this.showError(target);
       this.error.add(target);
     }
-
   }
 
   showError (elem) {
     elem.classList.remove('success');
     elem.classList.add('error');
+    elem.setAttribute('title', 'Неверный формат ввода');
+    console.dir(elem);
     if (elem.nextElementSibling && elem.nextElementSibling.classList.contains('validator-error')) {
       return;
     }
-    const errorDiv = document.createElement('div');
-    errorDiv.textContent = `Ошибка в этом поле`;
+    const errorDiv = document.createElement('lable');
+    errorDiv.textContent = `неверный формат ввода`;
     errorDiv.classList.add('validator-error');
     elem.insertAdjacentElement('afterend', errorDiv);
   }
@@ -92,10 +93,13 @@ class Validator{
         border: 2px solid red !important;
       }
       .validator-error {
-        display: none; 
+        display: inline-block;
+        border: 1px solid red;
+        border-radius: 5px;
         font-size: 12px;
         font-family: sans-serif;
         color: red;
+        padding: 0 5px;
       }
     `;
     document.head.appendChild(style);
