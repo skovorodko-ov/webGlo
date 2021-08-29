@@ -64,8 +64,6 @@ class Validator{
   showError (elem) {
     elem.classList.remove('success');
     elem.classList.add('error');
-    elem.setAttribute('title', 'Неверный формат ввода');
-    console.dir(elem);
     if (elem.nextElementSibling && elem.nextElementSibling.classList.contains('validator-error')) {
       return;
     }
@@ -73,6 +71,12 @@ class Validator{
     errorDiv.textContent = `неверный формат ввода`;
     errorDiv.classList.add('validator-error');
     elem.insertAdjacentElement('afterend', errorDiv);
+
+    let styleElem = getComputedStyle(elem);
+
+    if (styleElem.transform) {
+      errorDiv.style.transform = styleElem.transform;
+    }
   }
 
   showSuccess (elem) {
