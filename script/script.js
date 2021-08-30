@@ -423,8 +423,31 @@ window.addEventListener('DOMContentLoaded', () => {
   // send-ajax-form
   const sendForm = (id) => {
     const errorMessage = 'Что-то пошло не так...',
-      loadMessage = 'Загрузка...',
+      loadMessage = document.createElement('style'),
       successMesage = 'Спасибо! Мы скоро с вами свяжемся!';
+
+    loadMessage.textContent = `
+      .sk-rotating-plane {
+        width: 2em;
+        height: 2em;
+        margin: auto;
+        background-color: #337ab7;
+        animation: sk-rotating-plane 1.2s infinite ease-in-out;
+      }
+
+      @keyframes sk-rotating-plane {
+        0% {
+          transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+        }
+        50% {
+          transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+        }
+        100% {
+          transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+        }
+    }`;
+
+    document.head.appendChild(loadMessage);
 
     const form = document.getElementById(id),
       statusMessage = document.createElement('div');
@@ -433,8 +456,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
+      statusMessage.classList.add('sk-rotating-plane');
       form.appendChild(statusMessage);
-      statusMessage.textContent = loadMessage;
+
 
       const formData = new FormData(form);
       let body = {};
@@ -444,8 +468,10 @@ window.addEventListener('DOMContentLoaded', () => {
       });
 
       postData(body, () => {
+        statusMessage.classList.remove('sk-rotating-plane');
         statusMessage.textContent = successMesage;
       }, (error) => {
+        statusMessage.classList.remove('sk-rotating-plane');
         statusMessage.textContent = errorMessage;
         console.error(error);
       });
@@ -457,12 +483,10 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     };
 
-
     const postData = (body, outputData, errorData) => {
       const request = new XMLHttpRequest();
 
       request.addEventListener('readystatechange', () => {
-
         if (request.readyState !== 4) {
           return;
         }
@@ -476,7 +500,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
       request.open('POST', './server.php');
       request.setRequestHeader('Content-Type', 'aplication/json');
-
       request.send(JSON.stringify(body));
     };
   };
