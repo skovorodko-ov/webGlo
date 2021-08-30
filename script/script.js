@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const timerHours = document.getElementById('timer-hours'),
       timerMinutes = document.getElementById('timer-minutes'),
       timerSeconds = document.getElementById('timer-seconds');
-    
+
     const getTimeRemaining = () => {
       let dateStop = new Date(deadLine).getTime(),
         dateNow = new Date().getTime(),
@@ -14,13 +14,13 @@ window.addEventListener('DOMContentLoaded', () => {
         seconds = Math.floor(timeRemaining % 60),
         minuts = Math.floor((timeRemaining / 60) % 60),
         hours = Math.floor(timeRemaining / 60 / 60);
-        return {timeRemaining, hours, minuts, seconds};
+      return { timeRemaining, hours, minuts, seconds };
     };
 
     const addZero = (elem) => {
       if (elem < 10) {
         return '0' + elem;
-      } else {return elem;}
+      } else { return elem; }
     };
 
     const updateClock = setInterval(() => {
@@ -42,7 +42,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   };
 
-	countTimer('02 september 2021');
+  countTimer('02 september 2021');
 
   // Menu
   const togleMenu = () => {
@@ -77,17 +77,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (innerWidth > 768) {
           let count = 0,
-          animateInterval;
+            animateInterval;
 
           const popupAnimate = () => {
-          animateInterval = requestAnimationFrame(popupAnimate);
-          count += 5;
-          if (count <= 100) {
-            popup.style.opacity = `${count / 100}`;
-          } else {
-            cancelAnimationFrame(animateInterval);
-            count = 0;
-          }
+            animateInterval = requestAnimationFrame(popupAnimate);
+            count += 5;
+            if (count <= 100) {
+              popup.style.opacity = `${count / 100}`;
+            } else {
+              cancelAnimationFrame(animateInterval);
+              count = 0;
+            }
           };
 
           animateInterval = requestAnimationFrame(popupAnimate);
@@ -114,34 +114,36 @@ window.addEventListener('DOMContentLoaded', () => {
   //Low scroll
   const lowScroll = () => {
     const menu = document.querySelector('menu'),
-          main = document.querySelector('main');
+      main = document.querySelector('main');
     let target;
 
     const scroll = (e) => {
-    e.preventDefault();
+      // e.preventDefault(); // проблема с этим превент дефолт, отменяется также событие отправик формы!!!
 
-    if (e.target.hasAttribute('href')) {
-      target = e.target.getAttribute('href');
-    } else {
-      if (e.target.parentNode.hasAttribute('href')) {
-        target = e.target.parentNode.getAttribute('href');
+      if (e.target.hasAttribute('href')) {
+        e.preventDefault();
+        target = e.target.getAttribute('href');
       } else {
-        return;
+        if (e.target.parentNode.hasAttribute('href')) {
+          e.preventDefault();
+          target = e.target.parentNode.getAttribute('href');
+        } else {
+          return;
+        }
       }
-    }
 
-    const block = document.querySelector(target);
+      const block = document.querySelector(target);
 
-    if (block) {
-          window.scrollTo({
-      top: block.offsetTop,
-      behavior: "smooth"
-      });
-    }
+      if (block) {
+        window.scrollTo({
+          top: block.offsetTop,
+          behavior: "smooth"
+        });
+      }
     };
-    
-  menu.addEventListener('click', scroll);
-  main.addEventListener('click', scroll);
+
+    menu.addEventListener('click', scroll);
+    main.addEventListener('click', scroll);
   };
 
   lowScroll();
@@ -149,8 +151,8 @@ window.addEventListener('DOMContentLoaded', () => {
   // табы
   const tabs = () => {
     const tabHeader = document.querySelector('.service-header'),
-    tab = tabHeader.querySelectorAll('.service-header-tab'),
-    tabContent = document.querySelectorAll('.service-tab');
+      tab = tabHeader.querySelectorAll('.service-header-tab'),
+      tabContent = document.querySelectorAll('.service-tab');
 
 
     const toggleTabContent = (index) => {
@@ -168,12 +170,12 @@ window.addEventListener('DOMContentLoaded', () => {
     tabHeader.addEventListener('click', (event) => {
       let target = event.target;
       target = target.closest('.service-header-tab');
-      
+
       if (target) {
         tab.forEach((item, index) => {
           if (item === target) {
             toggleTabContent(index);
-        }
+          }
         });
       }
     });
@@ -229,7 +231,7 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     const stopSlide = () => {
-      clearInterval(interval); 
+      clearInterval(interval);
     };
 
     slider.addEventListener('click', (event) => {
@@ -271,14 +273,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
     slider.addEventListener('mouseover', (event) => {
       if (event.target.matches('.portfolio-btn') ||
-      event.target.matches('.dot')) {
+        event.target.matches('.dot')) {
         stopSlide();
       }
     });
 
     slider.addEventListener('mouseout', (event) => {
       if (event.target.matches('.portfolio-btn') ||
-      event.target.matches('.dot')) {
+        event.target.matches('.dot')) {
         startSlide();
       }
     });
@@ -290,20 +292,20 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // смена фото "наша команда"
   const changePhoto = () => {
-  const command = document.querySelector('.command');
-  let src;
+    const command = document.querySelector('.command');
+    let src;
 
-  command.addEventListener('mouseover', (e) => {
-    if (e.target.classList.contains('command__photo')) {
-      src = e.target.src;
-      e.target.src = e.target.dataset.img;
-    }
-  });
-  command.addEventListener('mouseout', (e) => {
-    if (e.target.classList.contains('command__photo')) {
-      e.target.src = src;
-    }
-  });
+    command.addEventListener('mouseover', (e) => {
+      if (e.target.classList.contains('command__photo')) {
+        src = e.target.src;
+        e.target.src = e.target.dataset.img;
+      }
+    });
+    command.addEventListener('mouseout', (e) => {
+      if (e.target.classList.contains('command__photo')) {
+        e.target.src = src;
+      }
+    });
   };
 
   changePhoto();
@@ -314,20 +316,24 @@ window.addEventListener('DOMContentLoaded', () => {
     const checkInputValue = (e) => {
       let inputValue = e.value;
       if (e.hasAttribute('min')) {
-          inputValue = inputValue.replace(/\D/g, '');
-          return inputValue;
+        inputValue = inputValue.replace(/\D/g, '');
+        return inputValue;
       }
-      if (e.getAttribute('name') === 'user_name' || e.getAttribute('name') === 'user_message') {
-          inputValue = inputValue.replace(/[^А-Яа-яЁё -]/g, '');
-          return inputValue;
+      if (e.getAttribute('name') === 'user_name') {
+        inputValue = inputValue.replace(/[^А-Яа-яЁё -]/g, '');
+        return inputValue;
       }
       if (e.getAttribute('name') === 'user_email') {
-          inputValue = inputValue.replace(/[^(A-Za-z0-9\-_\.!~\*'@)]/g, '');
-          return inputValue;
+        inputValue = inputValue.replace(/[^(A-Za-z0-9\-_\.!~\*'@)]/g, '');
+        return inputValue;
       }
       if (e.getAttribute('name') === 'user_phone') {
-          inputValue = inputValue.replace(/[^\+?(\d\-\(\))]/g, '');
-          return inputValue;
+        inputValue = inputValue.replace(/[^\+?(\d\-\(\))]/g, '');
+        return inputValue;
+      }
+      if (e.getAttribute('name') === 'user_message') {
+        inputValue = inputValue.replace(/[^А-Яа-я \d,\.\?!-;:]+/g, '');
+        return inputValue;
       }
     };
 
@@ -339,7 +345,7 @@ window.addEventListener('DOMContentLoaded', () => {
         target.value = target.value.trim();
         target.value = target.value.replace(/^(\-+)|(\-+)$/g, '').replace(/ +/g, ' ').replace(/\-+/g, '-').trim();
       }
-      
+
       if (target.getAttribute('name') === "user_name") {
         target.value = target.value.toLowerCase().replace(/^.|\s./g, (match) => match.toUpperCase());
       }
@@ -361,7 +367,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const countSum = () => {
       let total = 0,
         countValue = 1,
-        dayValye =1;
+        dayValye = 1;
       const typeValue = calcType.options[calcType.selectedIndex].value,
         squareValue = +calcSquare.value;
 
@@ -386,17 +392,17 @@ window.addEventListener('DOMContentLoaded', () => {
         total = price * typeValue * squareValue * countValue * dayValye;
       }
 
-            let count = 0;
+      let count = 0;
 
       if (total !== 0) {
         let animationTotal = setInterval(() => {
-        if (count <= total) {
-          totalValue.textContent = Math.floor(count);
-        } else if (count > total) {
-          clearInterval(animationTotal);
-        }
+          if (count <= total) {
+            totalValue.textContent = Math.floor(count);
+          } else if (count > total) {
+            clearInterval(animationTotal);
+          }
 
-        count += total / 20;
+          count += total / 20;
 
         }, 50);
       }
@@ -414,4 +420,74 @@ window.addEventListener('DOMContentLoaded', () => {
 
   calc(100);
 
+  // send-ajax-form
+  const sendForm = (id) => {
+    const errorMessage = 'Что-то пошло не так...',
+      loadMessage = 'Загрузка...',
+      successMesage = 'Спасибо! Мы скоро с вами свяжемся!';
+
+    const form = document.getElementById(id),
+      statusMessage = document.createElement('div');
+
+    statusMessage.style.cssText = 'font-size: 2rem;';
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      form.appendChild(statusMessage);
+      statusMessage.textContent = loadMessage;
+
+      const formData = new FormData(form);
+      let body = {};
+
+      formData.forEach((val, key) => {
+        body[key] = val;
+      });
+
+      postData(body, () => {
+        statusMessage.textContent = successMesage;
+      }, (error) => {
+        statusMessage.textContent = errorMessage;
+        console.error(error);
+      });
+    });
+
+    const clearFormInputs = () => {
+      for (let i = 0; i < (form.length - 1); i++) {
+        form[i].value = '';
+      }
+    };
+
+
+    const postData = (body, outputData, errorData) => {
+      const request = new XMLHttpRequest();
+
+      request.addEventListener('readystatechange', () => {
+
+        if (request.readyState !== 4) {
+          return;
+        }
+        if (request.status === 200) {
+          outputData();
+          clearFormInputs();
+        } else {
+          errorData(request.status);
+        }
+      });
+
+      request.open('POST', './server.php');
+      request.setRequestHeader('Content-Type', 'aplication/json');
+
+      request.send(JSON.stringify(body));
+    };
+  };
+
+  const takeForms = () => {
+    const forms = document.querySelectorAll('form');
+
+    forms.forEach(elem => {
+      sendForm(elem.id);
+    });
+  };
+
+  takeForms();
 });

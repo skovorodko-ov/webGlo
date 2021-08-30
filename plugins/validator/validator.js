@@ -1,7 +1,7 @@
 'use strict';
 
-class Validator{
-  constructor({selector, pattern = {}, method}) {
+class Validator {
+  constructor({ selector, pattern = {}, method }) {
     this.form = document.querySelector(selector);
     this.pattern = pattern;
     this.method = method;
@@ -16,15 +16,14 @@ class Validator{
     this.setPattern();
     this.elementsForm.forEach(elem => elem.addEventListener('change', this.checkIt.bind(this)));
     this.form.addEventListener('submit', e => {
-      this.elementsForm.forEach(elem => this.checkIt({target: elem}));
+      this.elementsForm.forEach(elem => this.checkIt({ target: elem }));
       if (this.error.size) {
         e.preventDefault();
       }
-    this.scroll();
     });
   }
 
-  isValid (elem) {
+  isValid(elem) {
     const validatorMethod = {
       notEmpty(elem) {
         if (elem.value.trim() === '') {
@@ -32,7 +31,7 @@ class Validator{
         }
         return true;
       },
-      pattern (elem, pattern) {
+      pattern(elem, pattern) {
         return pattern.test(elem.value);
       }
     };
@@ -46,11 +45,11 @@ class Validator{
     } else {
       console.warn('Необходимо передать id полей ввода и метод проверки этих полей!');
     }
-    
+
     return true;
   }
 
-  checkIt (event) {
+  checkIt(event) {
     const target = event.target;
     if (this.isValid(target)) {
       this.showSuccess(target);
@@ -61,7 +60,7 @@ class Validator{
     }
   }
 
-  showError (elem) {
+  showError(elem) {
     elem.classList.remove('success');
     elem.classList.add('error');
     if (elem.nextElementSibling && elem.nextElementSibling.classList.contains('validator-error')) {
@@ -79,7 +78,7 @@ class Validator{
     }
   }
 
-  showSuccess (elem) {
+  showSuccess(elem) {
     elem.classList.remove('error');
     elem.classList.add('success');
     if (elem.nextElementSibling && elem.nextElementSibling.classList.contains('validator-error')) {
@@ -87,11 +86,11 @@ class Validator{
     }
   }
 
-  applyStyle () {
+  applyStyle() {
     const style = document.createElement('style');    // display none добавлен что бы убрать подпись снизу от не валидного элемента
     style.textContent = `
       input.success {
-        border: 2px solid green !important;
+        border: 2px solid green;
       }
       input.error {
         border: 2px solid red !important;
@@ -109,7 +108,7 @@ class Validator{
     document.head.appendChild(style);
   }
 
-  setPattern () {
+  setPattern() {
     if (!this.pattern.phone) {
       this.pattern.phone = /^\+?[78]([-()]*\d){10}$/;
     }
