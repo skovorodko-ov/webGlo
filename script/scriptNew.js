@@ -310,178 +310,19 @@ window.addEventListener('DOMContentLoaded', () => {
 
   changePhoto();
 
-  // валидация калькулятора, имени, сообщения, e-mail, телефона
-  const validation = () => {
 
-    const checkInputValue = (e) => {
-      let inputValue = e.value;
-      if (e.hasAttribute('min')) {
-        inputValue = inputValue.replace(/\D/g, '');
-        // return inputValue;
+  // калькулятор
+  const checkInputCalc = (block) => {
+    block.addEventListener('change', (e) => {
+      let target = e.target;
+      if (target.hasAttribute('min')) {
+        target.value = target.value.replace(/\D/g, '');
       }
-      if (e.getAttribute('name') === 'user_name') {
-        console.log(inputValue.length);
-        inputValue = inputValue.replace(/[^А-Яа-яЁё -]/g, '');
-        if (inputValue.length < 3) {
-          inputValue = '';
-        }
-        // return inputValue;
-      }
-      if (e.getAttribute('name') === 'user_email') {
-        inputValue = inputValue.replace(/[^(A-Za-z0-9\-_\.!~\*'@)]/g, '');
-        // return inputValue;
-      }
-      if (e.getAttribute('name') === 'user_phone') {
-        inputValue = inputValue.replace(/[^\+?(\d\-\(\))]/g, '');
-        // return inputValue;
-      }
-      if (e.getAttribute('name') === 'user_message') {
-        inputValue = inputValue.replace(/[^А-Яа-я \d,\.\?!-;:]+/g, '');
-        // return inputValue;
-      }
-      return inputValue;
-    };
-
-    document.addEventListener('change', (event) => {
-      let target = event.target;
-      console.log(1);
-
-      if (target.value && !target.matches('select')) {
-        target.value = checkInputValue(target);
-        target.value = target.value.trim();
-        target.value = target.value.replace(/^(\-+)|(\-+)$/g, '').replace(/ +/g, ' ').replace(/\-+/g, '-').trim();
-      }
-
-      if (target.getAttribute('name') === "user_name") {
-        target.value = target.value.toLowerCase().replace(/^.|\s./g, (match) => match.toUpperCase());
-      }
-
     });
   };
 
-  validation();
-
-  class Validator {
-  constructor({ selector, pattern = {}, method }) {
-    this.form = document.querySelector(selector);
-    this.pattern = pattern;
-    this.method = method;
-    this.elementsForm = [...this.form.elements].filter(item => {
-      return item.tagName.toLowerCase() !== 'button' && item.type !== 'button';
-    });
-    this.error = new Set();
-  }
-
-  init() {
-    this.applyStyle();
-    this.setPattern();
-    this.elementsForm.forEach(elem => elem.addEventListener('change', this.checkIt.bind(this)));
-    this.form.addEventListener('submit', e => {
-      this.elementsForm.forEach(elem => this.checkIt({ target: elem }));
-      // if (this.error.size) {
-      //   e.preventDefault();
-      // }
-    });
-  }
-
-  isValid(elem) {
-    const validatorMethod = {
-      notEmpty(elem) {
-        if (elem.value.trim() === '') {
-          return false;
-        }
-        return true;
-      },
-      pattern(elem, pattern) {
-        return pattern.test(elem.value);
-      }
-    };
-
-    if (this.method) {
-      const method = this.method[elem.id];
-
-      if (method) {
-        return method.every(item => validatorMethod[item[0]](elem, this.pattern[item[1]]));
-      }
-    } else {
-      console.warn('Необходимо передать id полей ввода и метод проверки этих полей!');
-    }
-
-    return true;
-  }
-
-  checkIt(event) {
-    const target = event.target;
-    if (this.isValid(target)) {
-      this.showSuccess(target);
-      this.error.delete(target);
-    } else {
-      this.showError(target);
-      this.error.add(target);
-    }
-  }
-
-  showError(elem) {
-    elem.classList.remove('success');
-    elem.classList.add('error');
-    if (elem.nextElementSibling && elem.nextElementSibling.classList.contains('validator-error')) {
-      return;
-    }
-    const errorDiv = document.createElement('lable');
-    errorDiv.textContent = `неверный формат ввода`;
-    errorDiv.classList.add('validator-error');
-    elem.insertAdjacentElement('afterend', errorDiv);
-
-    let styleElem = getComputedStyle(elem);
-
-    if (styleElem.transform) {
-      errorDiv.style.transform = styleElem.transform;
-    }
-  }
-
-  showSuccess(elem) {
-    elem.classList.remove('error');
-    elem.classList.add('success');
-    if (elem.nextElementSibling && elem.nextElementSibling.classList.contains('validator-error')) {
-      elem.nextElementSibling.remove();
-    }
-  }
-
-  applyStyle() {
-    const style = document.createElement('style');    // display none добавлен что бы убрать подпись снизу от не валидного элемента
-    style.textContent = `
-      input.success {
-        border: 2px solid green;
-      }
-      input.error {
-        border: 2px solid red !important;
-      }
-      .validator-error {
-        display: inline-block;
-        border: 1px solid red;
-        border-radius: 5px;
-        font-size: 12px;
-        font-family: sans-serif;
-        color: red;
-        padding: 0 5px;
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  setPattern() {
-    if (!this.pattern.phone) {
-      this.pattern.phone = /^\+?[78]([-()]*\d){10}$/;
-    }
-    if (!this.pattern.email) {
-      this.pattern.email = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
-    }
-  }
-}
 
 
-
-  // калькулятор
   const calc = (price = 100) => {
     const calcBlock = document.querySelector('.calc-block'),
       calcType = document.querySelector('.calc-type'),
@@ -489,6 +330,9 @@ window.addEventListener('DOMContentLoaded', () => {
       calcCount = document.querySelector('.calc-count'),
       calcDay = document.querySelector('.calc-day'),
       totalValue = document.getElementById('total');
+
+      checkInputCalc(calcBlock);
+    
 
     const countSum = () => {
       let total = 0,
@@ -547,6 +391,88 @@ window.addEventListener('DOMContentLoaded', () => {
   calc(100);
 
   // send-ajax-form
+  const validationFormInputs = (param) => {
+
+    let elements = Array.from(param.elements);
+
+    let status = false;
+
+    const errorLable = (elem) => {
+      const errorDiv = document.createElement('lable');
+      errorDiv.textContent = `неверный формат ввода`;
+      errorDiv.classList.add('validator-error');
+      elem.insertAdjacentElement('afterend', errorDiv);
+      let styleElem = getComputedStyle(elem);
+
+      if (styleElem.transform) {
+        errorDiv.style.transform = styleElem.transform;
+      }
+    };
+
+    elements.forEach(elem => {
+      if (elem.id === `${param.id}-name`) {
+        elem.value = elem.value.replace(/[^А-Яа-яЁё -]/g, '');
+        elem.value = elem.value.trim();
+        elem.value = elem.value.replace(/^(\-+)|(\-+)$/g, '').replace(/ +/g, ' ').replace(/\-+/g, '-').trim();
+        elem.value = elem.value.toLowerCase().replace(/^.|\s./g, (match) => match.toUpperCase());
+        if (elem.value.length < 3) {
+          elem.value = '';
+        } 
+        if (!elem.value) {
+          elem.classList.add('error');
+          errorLable(elem);
+          status = true;
+        }
+      }
+
+      if (elem.id === `${param.id}-email`) {
+
+          let regExpEmail = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
+          if (!regExpEmail.test(elem.value)) {
+            elem.classList.add('error');
+            errorLable(elem);
+            status = true;
+          }
+      }
+      if (elem.id === `${param.id}-phone`) {
+
+          let regExpPhone = /^\+?7 ?\(\d{3}\) ?\d{3}-\d{2}-\d{2}$/;
+          if (!regExpPhone.test(elem.value)) {
+            elem.classList.add('error');
+            errorLable(elem);
+            status = true;
+          }
+      }
+      if (elem.id === `${param.id}-message`) {
+          elem.value = elem.value.replace(/[^А-Яа-я \d,\.\?!-;:]+/g, '');
+          elem.value = elem.value.trim();
+          elem.value = elem.value.replace(/^(\-+)|(\-+)$/g, '').replace(/ +/g, ' ').replace(/\-+/g, '-').trim();
+          if (elem.value.length < 3) {
+            elem.value = '';
+          } 
+          if (!elem.value) {
+            elem.classList.add('error');
+            errorLable(elem);
+            status = true;
+          }
+      }
+    });
+    return status;
+  };
+
+  const clearError = (param) => {
+    let elements = Array.from(param.elements);
+
+    const errorLable = document.querySelectorAll('.validator-error');
+
+    let elementsError = Array.from(errorLable);
+
+    elementsError.forEach(elem => elem.remove());
+
+    elements.forEach(elem => elem.classList.remove('error'));
+  };
+
+
   const sendForm = (id) => {
     const errorMessage = 'Что-то пошло не так...',
       loadMessage = document.createElement('style'),
@@ -572,98 +498,44 @@ window.addEventListener('DOMContentLoaded', () => {
           transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
         }
     }`;
+  
 
     document.head.appendChild(loadMessage);
+
+    const style = document.createElement('style'); 
+    style.textContent = `
+      .error {
+        border: 2px solid red !important;
+      }
+      .validator-error {
+        display: inline-block;
+        border: 1px solid red;
+        border-radius: 5px;
+        font-size: 12px;
+        font-family: sans-serif;
+        color: red;
+        padding: 0 5px;
+      }
+    `;
+    document.head.appendChild(style);
 
     const form = document.getElementById(id),
       statusMessage = document.createElement('div');
 
     statusMessage.style.cssText = 'font-size: 2rem;';
 
-    const valid = new Validator({
-			selector: `#form1`,
-			pattern: {
-				phone: /^\+?7 ?\(\d{3}\) ?\d{3}-\d{2}-\d{2}$/,
-				name: /[А-Яа-яЁё ]/g
-			},
-			method: {
-				'form1-phone': [
-					['notEmpty'],
-					['pattern', 'phone']
-				],
-				'form1-email': [
-					['notEmpty'],
-					['pattern', 'email']
-				],
-				'form1-name': [
-					['notEmpty'],
-					['pattern', 'name']
-				]
-			}
-		});
-
-		valid.init();
-
-    const valid2 = new Validator({
-			selector: '#form2',
-			pattern: {
-				phone: /^\+?7 ?\(\d{3}\) ?\d{3}-\d{2}-\d{2}$/,
-				name: /[А-Яа-яЁё ]/g,
-				message: /[А-Яа-я \d,\.\?!-;:]+/
-			},
-			method: {
-				'form2-phone': [
-					['notEmpty'],
-					['pattern', 'phone']
-				],
-				'form2-email': [
-					['notEmpty'],
-					['pattern', 'email']
-				],
-				'form2-name': [
-					['notEmpty'],
-					['pattern', 'name']
-				],
-				'form2-message': [
-					['notEmpty'],
-					['pattern', 'message']
-				]
-			}
-		});
-
-		valid2.init();
-
-    const valid3 = new Validator({
-			selector: '#form3',
-			pattern: {
-				phone: /^\+?7 ?\(\d{3}\) ?\d{3}-\d{2}-\d{2}$/,
-				name: /[А-Яа-яЁё -]/g
-			},
-			method: {
-				'form3-phone': [
-					['notEmpty'],
-					['pattern', 'phone']
-				],
-				'form3-email': [
-					['notEmpty'],
-					['pattern', 'email']
-				],
-				'form3-name': [
-					['notEmpty'],
-					['pattern', 'name']
-				]
-			}
-		});
-
-		valid3.init();
 
 
     form.addEventListener('submit', (event) => {
+      
+      clearError(form);
       event.preventDefault();
-      if (valid.error.size || valid2.error.size || valid3.error.size) {
+
+      if (validationFormInputs(form)) {
         return;
       }
-      
+
+      statusMessage.textContent = '';
       statusMessage.classList.add('sk-rotating-plane');
       form.appendChild(statusMessage);
 
@@ -678,6 +550,10 @@ window.addEventListener('DOMContentLoaded', () => {
       postData(body, () => {
         statusMessage.classList.remove('sk-rotating-plane');
         statusMessage.textContent = successMesage;
+        const popup = document.querySelector('.popup');
+        setTimeout(()=> {
+          popup.style.display = 'none';
+        }, 2000);
       }, (error) => {
         statusMessage.classList.remove('sk-rotating-plane');
         statusMessage.textContent = errorMessage;

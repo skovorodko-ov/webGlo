@@ -20,11 +20,78 @@ class Validator {
       console.log(this.error);
       if (this.error.size) {
         e.preventDefault();
+      } else {
+        this.postData(body, () => {
+        statusMessage.classList.remove('sk-rotating-plane');
+        statusMessage.textContent = successMesage;
+      }, (error) => {
+        statusMessage.classList.remove('sk-rotating-plane');
+        statusMessage.textContent = errorMessage;
+        console.error(error);
+      });
       }
     });
   }
 
-  isValid(elem) {
+  clearFormInputs () {
+      for (let i = 0; i < (this.form.length - 1); i++) {
+        this.form[i].value = '';
+      }
+    }
+
+  statusMessage () {
+    const statusMessage = document.createElement('div');
+    statusMessage.style.cssText = 'font-size: 2rem;';
+
+    const errorMessage = 'Что-то пошло не так...',
+      loadMessage = document.createElement('style'),
+      successMesage = 'Спасибо! Мы скоро с вами свяжемся!';
+
+    loadMessage.textContent = `
+      .sk-rotating-plane {
+        width: 2em;
+        height: 2em;
+        margin: auto;
+        background-color: #337ab7;
+        animation: sk-rotating-plane 1.2s infinite ease-in-out;
+      }
+
+      @keyframes sk-rotating-plane {
+        0% {
+          transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+        }
+        50% {
+          transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+        }
+        100% {
+          transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+        }
+    }`;
+
+    document.head.appendChild(loadMessage);
+  }
+
+  postData (body, outputData, errorData) {
+      const request = new XMLHttpRequest();
+
+      request.addEventListener('readystatechange', () => {
+        if (request.readyState !== 4) {
+          return;
+        }
+        if (request.status === 200) {
+          outputData();
+          this.clearFormInputs();
+        } else {
+          errorData(request.status);
+        }
+      });
+
+      request.open('POST', './server.php');
+      request.setRequestHeader('Content-Type', 'aplication/json');
+      request.send(JSON.stringify(body));
+  }
+
+  isValid (elem) {
     const validatorMethod = {
       notEmpty(elem) {
         if (elem.value.trim() === '') {
