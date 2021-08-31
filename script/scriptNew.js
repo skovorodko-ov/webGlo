@@ -524,7 +524,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     statusMessage.style.cssText = 'font-size: 2rem;';
 
-
+    const clearFormInputs = () => {
+      for (let i = 0; i < (form.length - 1); i++) {
+        form[i].value = '';
+      }
+    };
 
     form.addEventListener('submit', (event) => {
       
@@ -547,45 +551,47 @@ window.addEventListener('DOMContentLoaded', () => {
         body[key] = val;
       });
 
-      postData(body, () => {
+      const success = () => {
         statusMessage.classList.remove('sk-rotating-plane');
         statusMessage.textContent = successMesage;
         const popup = document.querySelector('.popup');
         setTimeout(()=> {
           popup.style.display = 'none';
         }, 2000);
-      }, (error) => {
+      }, 
+      error = (error) => {
         statusMessage.classList.remove('sk-rotating-plane');
         statusMessage.textContent = errorMessage;
         console.error(error);
-      });
+      };
+
+      postData(body)
+        .then(success)
+        .then(clearFormInputs)
+        .catch(error);
     });
 
-    const clearFormInputs = () => {
-      for (let i = 0; i < (form.length - 1); i++) {
-        form[i].value = '';
-      }
-    };
+    const postData = (body) => {
+      return new Promise((resolve, reject) => {
+        const request = new XMLHttpRequest();
 
-    const postData = (body, outputData, errorData) => {
-      const request = new XMLHttpRequest();
+        request.addEventListener('readystatechange', () => {
+          if (request.readyState !== 4) {
+            return;
+          }
+          if (request.status === 200) {
+            resolve();
+          } else {
+            reject(request.status);
+          }
+        });
 
-      request.addEventListener('readystatechange', () => {
-        if (request.readyState !== 4) {
-          return;
-        }
-        if (request.status === 200) {
-          outputData();
-          clearFormInputs();
-        } else {
-          errorData(request.status);
-        }
+        request.open('POST', './server.php');
+        request.setRequestHeader('Content-Type', 'aplication/json');
+        request.send(JSON.stringify(body));
       });
-
-      request.open('POST', './server.php');
-      request.setRequestHeader('Content-Type', 'aplication/json');
-      request.send(JSON.stringify(body));
     };
+
   };
 
   const takeForms = () => {
