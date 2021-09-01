@@ -551,7 +551,10 @@ window.addEventListener('DOMContentLoaded', () => {
         body[key] = val;
       });
 
-      const success = () => {
+      const success = (response) => {
+        if (response.status !== 200) {
+          throw new Error('status network not 200.');
+        }
         statusMessage.classList.remove('sk-rotating-plane');
         statusMessage.textContent = successMesage;
         const popup = document.querySelector('.popup');
@@ -572,23 +575,12 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     const postData = (body) => {
-      return new Promise((resolve, reject) => {
-        const request = new XMLHttpRequest();
-
-        request.addEventListener('readystatechange', () => {
-          if (request.readyState !== 4) {
-            return;
-          }
-          if (request.status === 200) {
-            resolve();
-          } else {
-            reject(request.status);
-          }
-        });
-
-        request.open('POST', './server.php');
-        request.setRequestHeader('Content-Type', 'aplication/json');
-        request.send(JSON.stringify(body));
+      return fetch('./server.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'aplication/json',
+        },
+        body: JSON.stringify(body)
       });
     };
 
