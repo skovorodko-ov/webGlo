@@ -561,17 +561,22 @@ window.addEventListener('DOMContentLoaded', () => {
         setTimeout(()=> {
           popup.style.display = 'none';
         }, 2000);
-      }, 
+      },
       error = (error) => {
         statusMessage.classList.remove('sk-rotating-plane');
         statusMessage.textContent = errorMessage;
         console.error(error);
       };
 
-      postData(body)
-        .then(success)
-        .then(clearFormInputs)
-        .catch(error);
+      (async () => {
+        try {
+          const responce = await postData(body);
+          success(responce);
+          clearFormInputs();
+        } catch(e) {
+          error(e);
+        }
+      })();
     });
 
     const postData = (body) => {
@@ -583,7 +588,6 @@ window.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify(body)
       });
     };
-
   };
 
   const takeForms = () => {
