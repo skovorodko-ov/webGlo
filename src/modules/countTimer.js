@@ -19,8 +19,13 @@
       } else { return elem; }
     };
 
+    let timer = getTimeRemaining();
+    timerHours.textContent = addZero(timer.hours);
+    timerMinutes.textContent = addZero(timer.minuts);
+    timerSeconds.textContent = addZero(timer.seconds);
+
     const updateClock = setInterval(() => {
-      let timer = getTimeRemaining();
+      timer = getTimeRemaining();
       timerHours.textContent = addZero(timer.hours);
       timerMinutes.textContent = addZero(timer.minuts);
       timerSeconds.textContent = addZero(timer.seconds);

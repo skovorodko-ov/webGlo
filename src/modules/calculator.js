@@ -27,7 +27,7 @@ const calculator = (price) => {
       const typeValue = calcType.options[calcType.selectedIndex].value,
         squareValue = +calcSquare.value;
 
-      if (!typeValue) {
+      if (!typeValue || !calcSquare.value) {
         calcSquare.value = '';
         calcCount.value = '';
         calcDay.value = '';

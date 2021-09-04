@@ -7,7 +7,23 @@ const validationFormInputs = (param) => {
 
     const errorLable = (elem) => {
       const errorDiv = document.createElement('lable');
-      errorDiv.textContent = `неверный формат ввода`;
+      const nameLable = 'Введите имя',
+            emailLable = 'email не существует',
+            phoneLable = 'Ввидите номер телефона',
+            messageLable = 'Ввидите сообщение на русском языке';
+      if (elem.id === `${param.id}-name`) {
+        errorDiv.textContent = nameLable;
+      }
+      if (elem.id === `${param.id}-email`) {
+        errorDiv.textContent = emailLable;
+      }
+      if (elem.id === `${param.id}-phone`) {
+        errorDiv.textContent = phoneLable;
+      }
+      if (elem.id === `${param.id}-message`) {
+        errorDiv.textContent = messageLable;
+      }
+      
       errorDiv.classList.add('validator-error');
       elem.insertAdjacentElement('afterend', errorDiv);
       let styleElem = getComputedStyle(elem);
@@ -19,11 +35,11 @@ const validationFormInputs = (param) => {
 
     elements.forEach(elem => {
       if (elem.id === `${param.id}-name`) {
-        elem.value = elem.value.replace(/[^А-Яа-яЁё -]/g, '');
-        elem.value = elem.value.trim();
-        elem.value = elem.value.replace(/^(\-+)|(\-+)$/g, '').replace(/ +/g, ' ').replace(/\-+/g, '-').trim();
-        elem.value = elem.value.toLowerCase().replace(/^.|\s./g, (match) => match.toUpperCase());
-        if (elem.value.length < 3) {
+        // elem.value = elem.value.replace(/[^А-Яа-яЁё -]/g, '');
+        // elem.value = elem.value.trim();
+        // elem.value = elem.value.replace(/^(\-+)|(\-+)$/g, '').replace(/ +/g, ' ').replace(/\-+/g, '-').trim();
+        // elem.value = elem.value.toLowerCase().replace(/^.|\s./g, (match) => match.toUpperCase());
+        if (elem.value.length < 2) {
           elem.value = '';
         } 
         if (!elem.value) {
@@ -52,9 +68,9 @@ const validationFormInputs = (param) => {
           }
       }
       if (elem.id === `${param.id}-message`) {
-          elem.value = elem.value.replace(/[^А-Яа-я \d,\.\?!-;:]+/g, '');
-          elem.value = elem.value.trim();
-          elem.value = elem.value.replace(/^(\-+)|(\-+)$/g, '').replace(/ +/g, ' ').replace(/\-+/g, '-').trim();
+          // elem.value = elem.value.replace(/[^А-Яа-я \d,\.\?!-;:]+/g, '');
+          // elem.value = elem.value.trim();
+          // elem.value = elem.value.replace(/^(\-+)|(\-+)$/g, '').replace(/ +/g, ' ').replace(/\-+/g, '-').trim();
           if (elem.value.length < 3) {
             elem.value = '';
           } 
@@ -208,6 +224,29 @@ const validationFormInputs = (param) => {
   };
 
   takeForms();
-};
 
+  const changeInput = () => {
+    const forms = document.querySelectorAll('form');
+    forms.forEach(elem => {
+      elem.addEventListener('change', (event) => {
+        let target = event.target;
+
+        target.value = target.value.trim();
+        target.value = target.value.replace(/^(\-+)|(\-+)$/g, '').replace(/ +/g, ' ').replace(/\-+/g, '-').trim();
+
+        if (target.name === 'user_name') {
+          target.value = target.value.replace(/[^А-Яа-яЁё -]/g, '');
+          target.value = target.value.toLowerCase().replace(/^.|\s./g, (match) => match.toUpperCase());
+        }
+        if (target.name === 'user_email') {
+          target.value = target.value.replace(/[^A-Za-z0-9-@_\.!~*']/g, '').trim();
+        }
+        if (target.name === 'user_message') {
+          target.value = target.value.replace(/[^А-Яа-я \d,\.\?!-;:]+/g, '').trim();
+        }
+      })
+    })
+  };
+  changeInput();
+};
   export default userForm;
