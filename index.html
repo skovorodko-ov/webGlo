@@ -406,6 +406,36 @@
 
 	<script src="plugins/phoneMask.js"></script>
 
+	<script src="./plugins/sliderOOP.js"></script>
+
+	<script>
+
+		const carousel = new SliderCarousel({
+			main: '.companies-wrapper',// передаем класс обертки всего слайдера
+			wrap: '.companies-hor', // передаем класс обертки самих слайдов
+			// next: '', // стрелка вправо
+			// prev: '', // стрелка в лево
+			position: '', // передаем позицию, не обязательно
+			slidesToShow: 4, // колличество слайдев на странице
+			infinity: 'true', // включение бесконечного слайдера
+			responsive: [{
+				breakpoint: 1024,
+				slidesToShow: 3
+			},
+			{
+				breakpoint: 768,
+				slidesToShow: 2
+			},
+			{
+				breakpoint: 576,
+				slidesToShow: 1
+			}]
+		});
+
+		carousel.init();
+
+	</script>
+
 	<script src="./dist/main.js"></script>
 
 </body>
